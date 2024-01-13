@@ -8,7 +8,7 @@
 <body>
     <h1>User情報管理システム</h1>
     <h2>User更新</h2>
-    <form method="post" th:action="@{/user/update/{id}/(id=${user.id})}" th:object="${user}>
+    <form method="post" th:action="@{/user/update/{id}/(id=${user.id})}" th:object="${user}">
         <label for="id">ID</label>
         <input type="hidden" id="id" name="id" th:value="*{id}" th:text="*{id}">
         <br>
@@ -36,3 +36,5 @@
         <input type="submit" value="更新実行">
         <a th:href="@{/user/list}">更新せずに一覧に戻る</a>
     </form>
+</body>
+</html>

@@ -8,37 +8,44 @@
 <body>
     <h1>User情報管理システム</h1>
     <h2>User一覧(全件)</h2>
-    <a th:href="@{/user/register}">Userの登録</a>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>名前</th>
-            <th>性別</th>
-            <th>年齢</th>
-            <th>メールアドレス</th>
-            <!-- Ch8にて追加 -->
-            <th></th>
-            <!-- Ch8にてここまで追加 -->
-        </tr>
-        <tr th:each="user : ${userlist}">
-            <!--
-                中の値を順番に取り出して変数dataに代入している
-                {}内が「繰り返し対象の配列値」
-            -->
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.name}"></td>
-            <td th:text="${user.gender}"></td>
-            <td th:text="${user.age}"></td>
-            <td th:text="${user.email}"></td>
-            
-            <!-- Ch8にて追加 -->
-            <td>
-                <a th:href="@{/user/update/{id}/(id=${user.id})}">更新</a>
-            </td>
-            <!-- Ch8にてここまで追加 -->
-            
-        </tr>
-    </table>
+    <!-- Ch9にて<a>以下をformで囲った -->
+    <form name="frm" method="post" th:action="@{/user/list}">
+        <a th:href="@{/user/register}">Userの登録</a>
+        <!-- Ch9にて削除ボタンを追加 -->
+        <input type="submit" name="deleteRun" value="(選択)したUserを一括削除">
+        
+        <table>
+            <tr>
+                <th class="center">(選択)</th>
+                <th>ID</th>
+                <th>名前</th>
+                <th>性別</th>
+                <th>年齢</th>
+                <th>メールアドレス</th>
+                <!-- Ch8にて追加 -->
+                <th></th>
+                <!-- Ch8にてここまで追加 -->
+            </tr>
+            <tr th:each="user : ${userlist}">
+                <!--
+                    中の値を順番に取り出して変数dataに代入している
+                    {}内が「繰り返し対象の配列値」
+                -->
+                <td class="center"><input type="checkbox" name="idck" th:value="${user.id}"></td>
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.gender}"></td>
+                <td th:text="${user.age}"></td>
+                <td th:text="${user.email}"></td>
+                
+                <!-- Ch8にて追加 -->
+                <td><a th:href="@{/user/update/{id}/(id=${user.id})}">更新</a></td>
+                <!-- Ch8にてここまで追加 -->
+                
+            </tr>
+        </table>
+    </form>
+    <script th:src="@{/js/user/list.js}"></script>
 </body>
 </html>
             
