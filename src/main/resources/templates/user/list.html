@@ -8,6 +8,7 @@
 <body>
     <h1>User情報管理システム</h1>
     <h2>User一覧(全件)</h2>
+    <a th:href="@{/user/register}">Userの登録</a>
     <table>
         <tr>
             <th>ID</th>
@@ -15,6 +16,9 @@
             <th>性別</th>
             <th>年齢</th>
             <th>メールアドレス</th>
+            <!-- Ch8にて追加 -->
+            <th></th>
+            <!-- Ch8にてここまで追加 -->
         </tr>
         <tr th:each="user : ${userlist}">
             <!--
@@ -26,6 +30,13 @@
             <td th:text="${user.gender}"></td>
             <td th:text="${user.age}"></td>
             <td th:text="${user.email}"></td>
+            
+            <!-- Ch8にて追加 -->
+            <td>
+                <a th:href="@{/user/update/{id}/(id=${user.id})}">更新</a>
+            </td>
+            <!-- Ch8にてここまで追加 -->
+            
         </tr>
     </table>
 </body>
