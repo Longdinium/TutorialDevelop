@@ -20,11 +20,11 @@ import com.techacademy.service.UserService;
 @RequestMapping("user")
 public class UserController {
     public final UserService service; // この一文はなぜいる？
-    
+
     public UserController(UserService service) { // コンストラクタ
         this.service = service;
     }
-    
+
     /** 一覧画面の表示 */
     @GetMapping("/list")
     public String getList(Model model) {
@@ -33,7 +33,7 @@ public class UserController {
         // user/list.htmlに画面遷移
         return "user/list";
     }
-    
+
     // ---Ch7追加ここから---
     /** User登録画面を表示 */
     @GetMapping("/register")
@@ -58,30 +58,41 @@ public class UserController {
         return "redirect:/user/list";
     }
     // ----- 変更ここまで -----
-    
-    
+
+
     // ---Ch8追加ここから---
     /** User更新画面を表示 */
     @GetMapping("/update/{id}/")
     public String getUser(@PathVariable("id") Integer id, Model model) {
-        // Modelに登録
-        model.addAttribute( "user", service.getUser(id) );
-            // サービスで定義したgetUserの結果をuserという名前でModelに登録
-        // User更新画面に遷移
+        if(id != null) {
+            // idがnullでないとき -> サービスから取得した値をModelに登録
+            model.addAttribute( "user", service.getUser(id) );
+                // サービスで定義したgetUserの結果をuserという名前でModelに登録
+            // User更新画面に遷移
+        } else {
+            // idがnullのとき（postUserから遷移したとき）
+            // -> postUserから渡されたuserの値をModelに登録
+            model.addAttribute("user", postUser(null, null, null));
+        }
         return "user/update";
+        
     }
-    
-    /** User更新処理 ここはUser登録処理と同じ内容 */
+
+    /** User更新処理 */
     @PostMapping("/update/{id}/")
-    public String postUser(User user) {
+    public String postUser(@Validated User user, BindingResult res, Model model) {
+        if(res.hasErrors()) {
+            // エラーありの場合
+            return getUser(null, null);
+        }
         // User登録
         service.saveUser(user);
         // 一覧画面にリダイレクト
         return "redirect:/user/list";
     }
     // ---Ch8追加ここまで---
-    
-    
+
+
     // ---Ch9追加ここから---
     /** User削除処理 */
     @PostMapping(path="list", params="deleteRun") // なぜ"/~"でなくpath="~"なんだ？
@@ -91,6 +102,6 @@ public class UserController {
         // 一覧画面にリダイレクト
         return "redirect:/user/list";
     }
-    
+
 
 }
