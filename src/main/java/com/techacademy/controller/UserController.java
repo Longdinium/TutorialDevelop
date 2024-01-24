@@ -63,7 +63,7 @@ public class UserController {
     // ---Ch8追加ここから---
     /** User更新画面を表示 */
     @GetMapping("/update/{id}/")
-    public String getUser(@PathVariable("id") Integer id, Model model) {
+    public String getUser(User user, @PathVariable("id") Integer id, Model model) {
         if(id != null) {
             // idがnullでないとき -> サービスから取得した値をModelに登録
             model.addAttribute( "user", service.getUser(id) );
@@ -72,7 +72,7 @@ public class UserController {
         } else {
             // idがnullのとき（postUserから遷移したとき）
             // -> postUserから渡されたuserの値をModelに登録
-            model.addAttribute("user", postUser(null, null, null));
+            model.addAttribute("user", user);
         }
         return "user/update";
         
@@ -83,7 +83,7 @@ public class UserController {
     public String postUser(@Validated User user, BindingResult res, Model model) {
         if(res.hasErrors()) {
             // エラーありの場合
-            return getUser(null, null);
+            return getUser(user, null, model);
         }
         // User登録
         service.saveUser(user);
